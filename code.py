@@ -2,7 +2,7 @@ import web
 
 render = web.template.render('templates/')
 
-#urls = ('/(.*)', 'index')
+urls = ('/(.*)', 'index')
 
 
 class index:
