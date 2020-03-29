@@ -1,0 +1,199 @@
+<!DOCTYPE HTML>
+<!--
+	Phantom by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Projects - LinkedIn Scrapper</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<div class="inner">
+
+							<!-- Logo -->
+								<a href="/" class="logo">
+									<span class="symbol"><img src="images/logo.svg" alt="" /></span><span class="title">PROJECTS</span>
+								</a>
+
+							<!-- Nav -->
+								<nav>
+									<ul>
+										<li><a href="#menu">Menu</a></li>
+									</ul>
+								</nav>
+
+						</div>
+					</header>
+
+				<!-- Menu -->
+					<nav id="menu">
+						<h2>Menu</h2>
+						<ul>
+							<li><a href="/">Home</a></li>
+							<li><a href="generic.html">Ipsum veroeros</a></li>
+							<li><a href="generic.html">Tempus etiam</a></li>
+							<li><a href="generic.html">Consequat dolor</a></li>
+							<li><a href="elements.html">Elements</a></li>
+						</ul>
+					</nav>
+
+				<!-- Main -->
+					<div id="main">
+						<div class="inner">
+							<h1>FInd Me Proxies (FIMP)</h1>
+							<!-- Photo by Ilya Pavlov on Unsplash -->
+							<span class="image main"><img src="images/find_me_proxies/pic-proxies.jpg" alt="" /></span>
+							<p>
+								Proxies are an intermediary server that separates users from the websites they browse.
+								When browsing without a proxy server, the HTML requests are sent directly between your
+								PC's browser and the website. Using a proxy creates a intermediary connection between
+								the two. This means your browser's request will get forwarded to the proxy server, which
+								will then retrieve information about the website, make the request on your behalf, and
+								whatever data (usually a web page) the website returns (to the proxy) in response to the
+								request, it will pass it back to your browser. In doing so, the proxy prevents the
+								websites you're browsing from knowing your PC's IP address, showing only the proxy's IP.
+								This way, you can now access and search the Internet anonymously using proxies as a
+								'gateway'.  Below is a simple illustration from
+								<a href="https://en.wikipedia.org/wiki/Proxy_server">Wikipedia</a> on communication
+								between 2 computers connected through a proxy.
+							</p>
+							<span class="image"><img src="images/find_me_proxies/proxies-wikipedia.jpg" alt="" /></span>
+							<p>
+								A proxy is capable of more than forwarding web requests for you to surf the Internet
+								anonymously.  Proxy servers can also serve as firewalls and web filters, provide shared
+								network connections, and cache data to speed up common requests.  A well configured
+								proxy protects users and the internal network from the dangers out in the world of the
+								wild Internet. Lastly, proxy servers provide a high level of privacy.  Below are some
+								reasons why organizations and individuals use a proxy server.
+
+								<ol>
+									<li>To control internet usage of employees and children</li>
+									<li>Bandwidth savings and improved speeds</li>
+									<li>Privacy</li>
+									<li>Improved security</li>
+									<li>Get access to blocked resources</li>
+								</ol>
+
+							<a href="https://free-proxy-list.net/"><b>free-proxy-list.net</b></a> provides a list of
+							free proxy servers that I often use for web scraping. I use proxies when web scraping to
+							avoid IP bans that some websites may impose. On the landing page, free-proxy-list.net
+							displays a table of 20 proxies with information like the IP address, port, country and
+							whether it support HTTPS.
+
+							Using Chrome's Inspect function, we can observe that details of each proxy are enclosed
+							within table row elements <b>&lt;tr&gt;</b>.
+							</p>
+							<span class="image main"><img src="images/find_me_proxies/chrome-proxies-inspect.jpg" alt="" /></span>
+							<p>
+								To aid us in extracting the list of proxy details, we'll be using the
+								<a href="https://www.crummy.com/software/BeautifulSoup/bs4/doc/">BeautifulSoup</a>
+								library. BeautifulSoup is a Python library for extracting data out from HTML and XML
+								files. It provides pythonic idioms ways of navigating, searching, and modifying the
+								parse tree.  Using the Python
+								<a href="https://realpython.com/python-requests/">requests</a> library, we retrieve the
+								HTML source of the landing page.  We then parse the HTML source using BeautifulSoup.
+							</p>
+							<span class="image"><img src="images/find_me_proxies/python-html-source.jpg" alt="" /></span>
+							<p>
+								<br/>
+								After parsing the HTML source, we retrieve the <b>&lt;table&gt;</b> element that
+								contains the list of proxy details using the <b>find_all</b> method of the HTML parser.
+								We tell the parser to return all <b>&lt;table&gt;</b> elements with the <b>id</b>
+								attribute having the value <b>proxylisttable</b>.  There will only be 1 such
+								table, so we can access it via the first item in the returned array.  To get the proxy
+								details, we get the parser to return all <b>&lt;td&gt;</b> elements within the proxy
+								list table.
+							</p>
+							<span class="image"><img src="images/find_me_proxies/python-html-find_all.jpg" alt="" /></span>
+							<p>
+								Within the proxy list table, each row has 8 columns and therefore 8 <b>&lt;td&gt;</b>
+								elements.  We iterate through each row and extract the proxy's IP, port number and
+								whether it supports HTTPS.The proxy details are stored in an array and returned.
+							</p>
+							<span class="image main"><img src="images/find_me_proxies/python-parser-td.jpg" alt="" /></span>
+							<p>
+								"You get what you pay for" as the saying goes.  Being a free service, there is no
+								guarantee of service availability. Free usually means that the backend hardware or
+								encryption maybe lacking. You’ll likely see performance, availability and potential data
+								security issues.  Never reveal your credit card numbers on these proxies.
+							</p>
+							<p>
+								To verify that the proxies scraped are working, we'll will test them against
+								<a href="https://httpbin.org/">https://httpbin.org/</a>. <b>httpbin</b> provides a
+								variety of HTTP request and response API services.  We'll be using the IP API under the
+								request inspection service.  The IP API will return the requester's IP address.
+							</p>
+							<span class="image"><img src="images/find_me_proxies/python-httpbin-proxies.jpg" alt="" /></span>
+							<p>
+								For each proxy scrapped, we'll use the the <b>requests</b> Python library to construct a
+								HTTP request with the proxy IP and port number.  The constructed request is then send to
+								<a href="https://httpbin.org/ip">httpbin</a>'s IP API.  If we receive a JSON response
+								containing the proxy's IP address within 5 seconds, we can be sure that the proxy is up
+								and running.  If not, a connection error is flagged and we move on to the next proxy. In
+								the end, we'll have a list of working proxy IP's and their respective port numbers.
+							</p>
+							<p>
+								All code of this project can be found at my
+								<a href="https://github.com/hakngrow/proxies">GitHub Repository</a>.
+							</p>
+						</div>
+					</div>
+
+				<!-- Footer -->
+					<footer id="footer">
+						<div class="inner">
+							<section>
+								<h2>Get in touch</h2>
+								<form method="post" action="#">
+									<div class="fields">
+										<div class="field half">
+											<input type="text" name="name" id="name" placeholder="Name" />
+										</div>
+										<div class="field half">
+											<input type="email" name="email" id="email" placeholder="Email" />
+										</div>
+										<div class="field">
+											<textarea name="message" id="message" placeholder="Message"></textarea>
+										</div>
+									</div>
+									<ul class="actions">
+										<li><input type="submit" value="Send" class="primary" /></li>
+									</ul>
+								</form>
+							</section>
+							<section>
+								<h2>Follow</h2>
+								<ul class="icons">
+									<li><a href="https://www.linkedin.com/in/howiengkarhow/" class="icon brands style2 fa-linkedin"><span class="label">LinkedIn</span></a></li>
+									<li><a href="https://github.com/hakngrow/" class="icon brands style2 fa-github"><span class="label">GitHub</span></a></li>
+									<li><a href="tel:+65-93682388" class="icon solid style2 fa-phone"><span class="label">Phone</span></a></li>
+									<li><a href="mailto:hakngrow@gmail.com" class="icon solid style2 fa-envelope"><span class="label">Email</span></a></li>
+								</ul>
+							</section>
+							<ul class="copyright">
+								<li>&copy; 2020 Howie Ng Kar How. All rights reserved</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+							</ul>
+						</div>
+					</footer>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>

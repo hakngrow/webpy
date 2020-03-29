@@ -39,7 +39,7 @@
 					<nav id="menu">
 						<h2>Menu</h2>
 						<ul>
-							<li><a href="index.html">Home</a></li>
+							<li><a href="/">Home</a></li>
 							<li><a href="generic.html">Ipsum veroeros</a></li>
 							<li><a href="generic.html">Tempus etiam</a></li>
 							<li><a href="generic.html">Consequat dolor</a></li>
@@ -52,10 +52,133 @@
 						<div class="inner">
 							<h1>A Simple LinkedIn Scrapper</h1>
 							<!-- Photo by Kon Karampelas on Unsplash -->
-							<span class="image main"><img src="images/pic_linkedin.jpg" alt="" /></span>
-							<p>Donec eget ex magna. Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque venenatis dolor imperdiet dolor mattis sagittis. Praesent rutrum sem diam, vitae egestas enim auctor sit amet. Pellentesque leo mauris, consectetur id ipsum sit amet, fergiat. Pellentesque in mi eu massa lacinia malesuada et a elit. Donec urna ex, lacinia in purus ac, pretium pulvinar mauris. Curabitur sapien risus, commodo eget turpis at, elementum convallis elit. Pellentesque enim turpis, hendrerit tristique.</p>
-							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis dapibus rutrum facilisis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Etiam tristique libero eu nibh porttitor fermentum. Nullam venenatis erat id vehicula viverra. Nunc ultrices eros ut ultricies condimentum. Mauris risus lacus, blandit sit amet venenatis non, bibendum vitae dolor. Nunc lorem mauris, fringilla in aliquam at, euismod in lectus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. In non lorem sit amet elit placerat maximus. Pellentesque aliquam maximus risus, vel venenatis mauris vehicula hendrerit.</p>
-							<p>Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque venenatis dolor imperdiet dolor mattis sagittis. Praesent rutrum sem diam, vitae egestas enim auctor sit amet. Pellentesque leo mauris, consectetur id ipsum sit amet, fersapien risus, commodo eget turpis at, elementum convallis elit. Pellentesque enim turpis, hendrerit tristique lorem ipsum dolor.</p>
+							<span class="image main"><img src="images/linkedin_scrapper/pic-linkedin.jpg" alt="" /></span>
+							<p>
+								This project was a by-product of my job search.  Before we start, a quick shout out to
+								<a href="https://sg.linkedin.com/in/vidyut-singhania-26966434">Vidyut</a>, my
+								instructor from General Assembly.  He was the one that came up with this idea and
+								dropped it in the Slack group. He's also the COO of Babel.
+								<a href="https://babel.sg/">Badel</a> helps organizations
+								become data driven decision makers through customized solutions. If you're serious about
+								putting your company's data to better use, and improving performance through it, you
+								better check them out.
+							</p>
+							<p>
+								After my Data Science Immersive with GA, it was time to go out and face the whole new
+								world, and get a job.  I needed a quick way to search for relevant people in the
+								industry, connect to them, and spam them with my not so awesome CV.  What better way to
+								do that then to harness the combined prowess of Google and LinkedIn. With a little bit
+								of Selenium, and a touch of Python, no LinkedIn job or profile is out of reach.  It will
+								be almost like Professor X with Cerebro.
+							</p>
+							<p>
+								First, we need to perform a Google search on the profiles or jobs interested. I stored
+								the search query, along with other configurables, in a Python script.
+								<b>site:linkedin.com/in/</b> tells Google to search for LinkedIn profiles and
+								<b>site:linkedin.com/jobs/</b> for LinkedIn jobs. You can then append keywords relating
+								to job title or position, geographical location, etc to the search query.  For the
+								more details on how to construct a search query, refer to the
+								<a href="https://developers.google.com/issue-tracker/concepts/search-query-language">
+									Search Query Language Documentation
+								</a>.  Another parameter you can configure is the <b>google_scrape_limit</b>, it limits
+								the number of returned links from the search.
+							</p>
+							<span class="image"><img src="images/linkedin_scrapper/google-parameters.jpg" alt="" /></span>
+							<p>
+								Next, to automate the Google Search, we need to use Selenium.  We need to tell Selenium
+								which input element on the web page to set the search query and which submit element to
+								click on to start the search (alternatively we can send a RETURN/ENTER keystroke).  To
+								determine those web elements, we need to reference the HTML source of the web page.
+								And we can do that by right-clicking the Google Search home page (this brings up the
+								context menu), and clicking on the Inspect option.
+							</p>
+							<span class="image main"><img src="images/linkedin_scrapper/google-home.jpg" alt="" /></span>
+							<p>
+								On clicking the Inspect option, the Chrome browser splits into 2 panels. The left panel
+								displays the original web page, and the right panel displays the HTML source behind the
+								web page. To identify HTML source behind the search query text input, we need to click
+								on the Inspect Element icon on the upper left corner, of the right panel displaying
+								the HTML source. After which, mousing over the search query text input will highlight it
+								and bring up the HTML source corresponding to the text input on the right.
+							</p>
+							<span class="image main"><img src="images/linkedin_scrapper/google-inspect-element.jpg" alt="" /></span>
+							<p>
+								The search query text input is defined by a HTML
+								<a href="https://www.w3schools.com/tags/tag_input.asp"><b>&lt;input&gt;</b></a> element.
+								Within the input tag contains a whole bunch of attributes that define the text input in
+								terms of styling and functionality.  The attribute that we are interested in is the
+								<b>name</b> attribute, as it allows us to uniquely identify the text input amongst the
+								thousands of web elements in the HTML source. Using the
+								<b>find_by_element_name</b> method and the <b>name</b> attribute value of <b>q</b>, we
+								can assess and set the search query text to the value specified earlier in the
+								<b>parameters.py</b> script. <b>sleep(1)</b> tells the browser to wait for 1 second,
+								allowing for the search results page to complete loading.
+							</p>
+							<span class="image main"><img src="images/linkedin_scrapper/selenium-google-search.jpg" alt="" /></span>
+							<p>
+								Google Search will display 10 results (LinkedIn profiles) per page. Each result has a
+								hyperlink to the LinkedIn profile page. We need to scrape and store the URLs of these
+								profile links to be used later. Using the same inspect element method earlier, we can
+								see that unlike the search query text input, there is no <b>name</b> attribute for each
+								hyperlink. However, each search result is enclosed within a
+								<a href="https://www.w3schools.com/tags/tag_div.asp"><b>&lt;div&gt;</b></a> element
+								having a <b>class</b> attribute of value <b>r</b> (<b>r</b> probably for result).
+							</p>
+							<span class="image main"><img src="images/linkedin_scrapper/google-search-inspect-link.jpg" alt="" /></span>
+							<p>
+								Using the <b>find_elements_by_class_name</b> method and the <b>class</b> attribute value
+								of <b>r</b>, we can extract all the <b>&lt;div&gt;</b> elements from the HTML source
+								containing the hyperlinks to the LinkedIn profiles.  Within each <b>&lt;div&gt;</b>
+								element, we can use the <b>find_element_by_tag_name</b> method to locate the hyperlink
+								and the <b>get_attribute('href')</b> method to extract the profile URL.
+
+							</p>
+							<span class="image"><img src="images/linkedin_scrapper/selenium-linkedin-urls.jpg" alt="" /></span>
+							<p>
+								You can configure the number of LinkedIn profiles scraped by setting the
+								<b>google_scrape_limit</b> parameter.  Each result page returns 10 LinkedIn profiles.
+								If needed, the scrapper will initiate a next page on Google Search to scrape more
+								profiles.  This is again done by locating the next page link using the inspect elements
+								feature of Chrome, and using Selenium to load the next result page.  This process is
+								repeated until the scrape limit is reached.  <b>sleep(3)</b> tells the scrapper to wait
+								for 3 seconds, allowing the next result page to load.
+							</p>
+							<span class="image"><img src="images/linkedin_scrapper/selenium-google-next-pg.jpg" alt="" /></span>
+							<p>
+								At this point, we have scrapped and stored the URLs of the LinkedIn profiles based on
+								the search query parameter. Next we'll need to login to LinkedIn to extract more
+								profile information.  Using Selenium, we repeat the same process to initiate a login.
+								<ol>
+									<li>Inspect the web elements on the login page</li>
+									<li>Locate the email and password text inputs</li>
+									<li>Set their values as defined in the <b>parameters.py</b></li>
+									<li>Invoke a sign in button click</li>
+								</ol>
+							</p>
+							<span class="image main"><img src="images/linkedin_scrapper/selenium-linkedin-login-html.jpg" alt="" /></span>
+							<p>
+								After login, we can scrape any information available on the profile page, but for
+								purpose of this exercise we'll just do the name, position and company.  To help us do
+								that, we'll be using the Python module
+								<a href="https://parsel.readthedocs.io/en/latest/">Parsel</a>. Parsel is a tool to help
+								us extract data from HTML and XML using
+								<a href="https://en.wikipedia.org/wiki/XPath">XPath</a> and
+								<a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors">CSS selectors</a>
+								.  Again, we inspect web elements to identify those that contain the information we wish
+								to scrape. Using Parsel, XPath and CSS selectors, we locate and extract the data from
+								these web elements.
+							</p>
+							<span class="image main"><img src="images/linkedin_scrapper/linkedin-profile.jpg" alt="" /></span>
+							<p>
+								The scrapper iterates through all the stored profile URLs, using each to extract the
+								desired profile data. The data can then be persisted in a CSV file to be further
+								processed later.
+							</p>
+							<span class="image"><img src="images/linkedin_scrapper/selenium-csv.jpg" alt="" /></span>
+							<p>
+								All code of this project can be found at my
+								<a href="https://github.com/hakngrow/linkedin_scrapper">GitHub Repository</a>.
+							</p>
 						</div>
 					</div>
 

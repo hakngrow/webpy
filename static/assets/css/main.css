@@ -3327,3 +3327,9 @@ input, select, textarea {
 			}
 
 		}
+
+/* Code Block */
+
+#code {
+    font: courier;
+}
